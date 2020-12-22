@@ -7,6 +7,11 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    /**
+     * 这是成员变量，不想注入
+     */
+    @Autowired
+    private Integer integer;
 
     public UserService getUserService() {
         return userService;

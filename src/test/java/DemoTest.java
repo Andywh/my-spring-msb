@@ -3,6 +3,7 @@ import org.junit.Test;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * Created by Ai Lun on 2020-12-23.
@@ -15,6 +16,19 @@ public class DemoTest {
         UserController userController = new UserController();
         Class<? extends UserController> clazz = userController.getClass();
         Field[] declaredFields = clazz.getDeclaredFields();
+
+        UserService userService = new UserService();
+        Stream.of(clazz.getDeclaredFields()).forEach(field -> {
+            String name = field.getName();
+            Autowired annotation = field.getAnnotation(Autowired.class);
+            if (annotation != null) {
+                field.setAccessible(true);
+                Class<?> type = field.getType();
+                type.getConstructor().newInstance();
+            }
+        });
+
+
         Arrays.asList(declaredFields).stream().forEach(System.out::println);
         Field userServiceField = clazz.getDeclaredField("userService");
         userServiceField.setAccessible(true);
